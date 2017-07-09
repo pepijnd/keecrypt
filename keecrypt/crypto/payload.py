@@ -1,31 +1,23 @@
-from Crypto.Cipher import AES, Salsa20
+from Crypto.Cipher import AES
 
-from keecrypt.common import sha256
+from keecrypt.exception import KDBXUnsupportedError
 
-
-class Decryptor:
-
-    def __init__(self, payload, key, transform_seed, iv, rounds, master_seed):
-        self.payload = payload
-        self.key = key
-        self.transform_seed = transform_seed
-        self.iv = iv
-        self.rounds = rounds
-        self.master_seed = master_seed
-
-        assert len(self.master_seed) == 32
-
-    def decrypt(self):
-        cipher = AES.new(self.transform_seed, AES.MODE_ECB)
-        transform_key = self.key
-        for n in range(self.rounds):
-            transform_key = cipher.encrypt(transform_key)
-        transform_key = sha256(transform_key)
-        master_key = sha256(self.master_seed + transform_key)
-        cipher = AES.new(master_key, AES.MODE_CBC, self.iv)
-        return cipher.decrypt(self.payload)
+ciphers = {
+    b'\x31\xC1\xF2\xE6\xBF\x71\x43\x50\xBE\x58\x05\x21\x6A\xFC\x5A\xFF': 'AES',
+    b'\xAD\x68\xF2\x9F\x57\x6F\x4B\xB9\xA3\x6A\xD4\x7A\xF9\x65\x34\x6C': 'TwoFish'
+}
 
 
+def decrypt(payload, master_key, iv, cipher_id):
+    cipher = ciphers[cipher_id]
+    if cipher == 'AES':
+        return decrypt_aes(payload, master_key, iv)
+    elif cipher == 'TwoFish':
+        raise KDBXUnsupportedError('TwoFish encryption is not supported')
+    else:
+        raise KDBXUnsupportedError('unsupported encryption is used')
 
 
-
+def decrypt_aes(payload, master_key, iv):
+    cipher = AES.new(master_key, AES.MODE_CBC, iv)
+    return cipher.decrypt(payload)
