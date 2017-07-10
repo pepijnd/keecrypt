@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>KeecryptWindow</class>
- <widget class="QMainWindow" name="KeecryptWindow">
+ <class>Mainwindow</class>
+ <widget class="QMainWindow" name="Mainwindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -60,8 +60,8 @@
         <string>Save</string>
        </property>
        <property name="icon">
-        <iconset resource="keecrypt-resources.qrc">
-         <normaloff>:/icons/resources/save.png</normaloff>:/icons/resources/save.png</iconset>
+        <iconset resource="resources/icons.qrc">
+         <normaloff>:/icons/icons/save.png</normaloff>:/icons/icons/save.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -80,8 +80,8 @@
         <string>Load</string>
        </property>
        <property name="icon">
-        <iconset resource="keecrypt-resources.qrc">
-         <normaloff>:/icons/resources/load.png</normaloff>:/icons/resources/load.png</iconset>
+        <iconset resource="resources/icons.qrc">
+         <normaloff>:/icons/icons/load.png</normaloff>:/icons/icons/load.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -171,7 +171,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="keecrypt-resources.qrc"/>
+  <include location="resources/icons.qrc"/>
  </resources>
  <connections/>
 </ui>
