@@ -6,6 +6,8 @@
 *_ui.py
 *_rc.py
 
+testresults.xml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

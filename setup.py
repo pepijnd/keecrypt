@@ -4,12 +4,29 @@ from distutils.command.build import build
 from distutils.command.clean import clean
 from distutils.core import Command
 from setuptools import setup, find_packages
+from setuptools.command.test import test
+
 
 from setup import ui
 import keecrypt
 
-root = os.path.abspath(os.path.dirname(__file__))
+root = os.path.dirname(__file__)
 packages = find_packages(exclude=[('setup',), ('tests',)])
+
+
+class PyTestCommand(test):
+    user_options = []
+
+    def initialize_options(self):
+        super().initialize_options()
+
+    def finalize_options(self):
+        super().finalize_options()
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        return
 
 
 class BuildUiCommand(Command):
@@ -20,7 +37,7 @@ class BuildUiCommand(Command):
     ]
 
     def initialize_options(self):
-        self.gui_src = os.path.join(root, 'gui_src')
+        self.gui_src = os.path.join(root, 'gui_src/')
         self.output_path = os.path.join(root, 'keecrypt/gui/')
 
     def finalize_options(self):
@@ -45,7 +62,7 @@ class CleanUiCommand(Command):
         pass
 
     def run(self):
-        ui.clean(root)
+        ui.clean(os.path.join(root, '.'))
 
 
 class Build(build):
@@ -60,21 +77,31 @@ class Clean(clean):
         super().run()
 
 
+requirements = [
+    'construct',
+    'pycryptodome',
+    'pyqt5'
+]
+
 setup(
-    name=keecrypt.__author__,
+    name=keecrypt.__title__,
     version=keecrypt.__version__,
     description=keecrypt.__description__,
+    long_description=open('README.rst', 'r').read(),
     author=keecrypt.__author__,
     author_email=keecrypt.__author_email__,
     url=keecrypt.__url__,
     license=keecrypt.__license__,
     packages=packages,
-    package_data={'': ['LICENSE']},
+    package_data={'': ['LICENSE' 'README.rst']},
     package_dir={'keecrypt': 'keecrypt'},
+    install_requires=requirements,
     cmdclass={
         'build': Build,
         'build_qt': BuildUiCommand,
         'clean': Clean,
-        'clean_qt': CleanUiCommand
-    }
+        'clean_qt': CleanUiCommand,
+        'test': PyTestCommand
+    },
+    zip_safe=False
 )

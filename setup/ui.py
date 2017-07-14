@@ -1,5 +1,4 @@
 import os
-from functools import partial
 
 from PyQt5 import uic
 from PyQt5.pyrcc import RCCResourceLibrary
@@ -14,22 +13,25 @@ def build_rcc(src_dir, output_path):
                 library.setResourceRoot('')
                 if library.readFiles():
                     output_name = os.path.splitext(file)[0] + '_rc.py'
-                    library.output(os.path.join(output_path, 'resources', output_name))
+                    output_path = os.path.join(output_path, 'resources', output_name)
+                    print('building', os.path.join(base, file), '->', output_path)
+                    library.output(output_path)
 
 
 def build_ui(src_dir, output_path):
-    uic.compileUiDir(src_dir,
-                     recurse=True,
-                     map=partial(map_ui, output_path=output_path),
-                     from_imports=True,
-                     import_from='..resources')
+    for base, sub_dirs, files in os.walk(src_dir):
+        for file in files:
+            if os.path.splitext(file)[1] == '.ui':
+                module = os.path.relpath(base, src_dir)
+                ui_name = os.path.join(base, file)
+                py_name = os.path.join(output_path, 'ui', module, '_' + os.path.splitext(file)[0] + '_ui.py')
 
-
-def map_ui(module_name, ui_file, output_path):
-    output_path = os.path.join(output_path, 'ui/')
-    ui_file = '_' + os.path.splitext(ui_file)[0] + '_ui.py'
-    print(output_path, ui_file)
-    return output_path, ui_file
+                print('building', ui_name, '->', py_name)
+                with open(ui_name, 'r') as ui_file:
+                    with open(py_name, 'w') as py_file:
+                        uic.compileUi(ui_file, py_file,
+                                      from_imports=True,
+                                      import_from='keecrypt.gui.resources')
 
 
 def clean(root):

@@ -1,2 +1,0 @@
-# keecrypt
-Alternative for keepass

@@ -1,0 +1,4 @@
+include LICENSE pytest.ini .coveragerc
+recursive-include gui_src/ *
+recursive-include setup/ *.py
+recursive-include tests/ *.py
