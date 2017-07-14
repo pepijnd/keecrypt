@@ -47,6 +47,8 @@ class BuildUiCommand(Command):
             assert os.path.exists(self.output_path)
 
     def run(self):
+        if ui.no_pyqt5:
+            raise ImportError("Can't build ui without pyqt5. run pip install pyqt5 to install")
         ui.build_rcc(self.gui_src, self.output_path)
         ui.build_ui(self.gui_src, self.output_path)
 

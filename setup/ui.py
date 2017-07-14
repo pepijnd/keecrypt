@@ -1,7 +1,14 @@
 import os
 
-from PyQt5 import uic
-from PyQt5.pyrcc import RCCResourceLibrary
+try:
+    from PyQt5 import uic
+    from PyQt5.pyrcc import RCCResourceLibrary
+except ImportError:
+    uic = None
+    RCCResourceLibrary = None
+    no_pyqt5 = True
+else:
+    no_pyqt5 = False
 
 
 def build_rcc(src_dir, output_path):
