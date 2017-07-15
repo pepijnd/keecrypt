@@ -1,3 +1,4 @@
-from .maincontroller import MainController
+from .app import App
+from .mainwindow import MainWindow
 
-__all__ = ['MainController']
+__all__ = ['App', 'MainWindow']

@@ -67,10 +67,10 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="treeView"/>
+        <widget class="QTreeView" name="GroupTreeVIew"/>
        </item>
        <item>
-        <widget class="QListView" name="listView"/>
+        <widget class="QListView" name="EntryListView"/>
        </item>
       </layout>
      </widget>

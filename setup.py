@@ -80,9 +80,9 @@ class Clean(clean):
 
 
 requirements = [
-    'construct',
-    'pycryptodome',
-    'pyqt5'
+    'construct>=2.8.12',
+    'pycryptodome>=3.4.6',
+    'PyQt5>=5.9'
 ]
 
 setup(

@@ -1,8 +1,9 @@
-from keecrypt.gui.controllers import MainController
+from keecrypt.controllers import MainController
+
 
 def main():
-    controller = MainController()
-    controller.run()
+    MainController()
+
 
 if __name__ == '__main__':
     main()
