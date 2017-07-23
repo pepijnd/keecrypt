@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QFileDialog
 
 from keecrypt.gui.controllers import App, MainWindow
+from keecrypt.kdbx import KDBXReader
 
 
 class MainController:
@@ -20,4 +21,5 @@ class MainController:
                                           'Keepass Database (*.kdbx)',
                                           'Keepass Database (*.kdbx)',
                                           options=options)
-        print(filename)
+        reader = KDBXReader(filename=filename[0])
+        reader.decrypt('test_file')

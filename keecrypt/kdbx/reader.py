@@ -14,11 +14,11 @@ class KDBXReader:
             self.input_buffer = BytesIO(fileobj.read())
 
         self.parser = KDBXParser(self.input_buffer)
-        self.blocks = None
+        self.file_data = None
 
     def decrypt(self, password):
-        self.blocks = self.parser.decrypt(password)
-        root = ElementTree.fromstring(self.blocks[0])  # type: ElementTree.Element
+        self.file_data = self.parser.decrypt(password)
+        root = ElementTree.fromstring(self.file_data)  # type: ElementTree.Element
         # print(self.blocks[0].decode('utf-8'))
         for group in root.findall('Root/Group'):
             self.parse_group(group)

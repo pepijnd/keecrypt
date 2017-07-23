@@ -82,7 +82,8 @@ class Clean(clean):
 requirements = [
     'construct>=2.8.12',
     'pycryptodome>=3.4.6',
-    'PyQt5>=5.9'
+    'PyQt5>=5.9',
+    'argon2-cffi>=16.3.0'
 ]
 
 setup(
