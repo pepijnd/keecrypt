@@ -1,6 +1,7 @@
 from io import BytesIO
-
 from xml.etree import ElementTree
+
+from construct import Int8ul, Int32ul
 
 from keecrypt.kdbx.parser import KDBXParser
 
@@ -15,13 +16,33 @@ class KDBXReader:
 
         self.parser = KDBXParser(self.input_buffer)
         self.file_data = None
+        self.file_version = (0, 0)
 
     def decrypt(self, password):
         self.file_data = self.parser.decrypt(password)
-        root = ElementTree.fromstring(self.file_data)  # type: ElementTree.Element
-        # print(self.blocks[0].decode('utf-8'))
-        for group in root.findall('Root/Group'):
-            self.parse_group(group)
+        with open('kdbx3.xml', 'w') as f:
+            f.write(self.file_data.decode('utf-8'))
+        if self.parser.file_version[0] >= 4:
+            buffer = BytesIO(self.file_data)
+            item_type = None
+            attachments = []
+            while item_type != b'\x00':
+                item_type = buffer.read(1)
+                item_size = Int32ul.parse(buffer.read(4))
+                item_data = buffer.read(item_size)
+
+                if item_type == b'\x01':
+                    self.inner_random_stream_id = item_data
+                elif item_type == b'\x02':
+                    self.inner_random_stream_key = item_data
+                elif item_type == b'\x03':
+                    flag = item_data[0]
+                    attachment = item_data[1:]
+                    attachments.append((flag, attachment))
+            self.file_data = buffer.read()
+        root = ElementTree.fromstring(self.file_data)
+        print(root)
+
 
     @staticmethod
     def parse_group(group):

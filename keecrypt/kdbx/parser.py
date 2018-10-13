@@ -63,7 +63,7 @@ class KDBXParser:
             block_data = payload.decrypt(block.block_data, master_key,
                                          self.headers.ENCRYPTIONIV,
                                          self.headers.CIPHERID)
-            block_data = block_data.strip(b'\x06')
+            block_data = block_data.strip(b'\x06\r\n')
 
             if self.headers.COMPRESSIONFLAGS != 0:
                 block_data = gzip.decompress(block_data)
