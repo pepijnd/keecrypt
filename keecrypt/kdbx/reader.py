@@ -20,8 +20,6 @@ class KDBXReader:
 
     def decrypt(self, password):
         self.file_data = self.parser.decrypt(password)
-        with open('kdbx3.xml', 'w') as f:
-            f.write(self.file_data.decode('utf-8'))
         if self.parser.file_version[0] >= 4:
             buffer = BytesIO(self.file_data)
             item_type = None
@@ -41,7 +39,17 @@ class KDBXReader:
                     attachments.append((flag, attachment))
             self.file_data = buffer.read()
         root = ElementTree.fromstring(self.file_data)
-        print(root)
+
+        from kdbx.models import KeepassFile
+
+        test = KeepassFile.from_xml_element(root)
+
+        def itergroups(group, groupId):
+            for subgroup in group.groups:
+                itergroups(subgroup, groupId+1)
+                for entry in subgroup.entries:
+                    print(groupId, subgroup.name, entry['Title'])
+        itergroups(test, 0)
 
 
     @staticmethod

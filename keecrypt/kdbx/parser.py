@@ -122,33 +122,28 @@ class KDBXParser:
 
     # kdb3 specific stuff
     def decrypt_kdbx3(self, composite_key):
-            master_key = composite_key.transform_aeskdf(self.headers.TRANSFORMSEED,
-                                                        self.headers.TRANSFORMROUNDS)[0]
+        master_key = composite_key.transform_aeskdf(self.headers.TRANSFORMSEED,
+                                                    self.headers.TRANSFORMROUNDS)[0]
 
-            payload_data = payload.decrypt(self.input_buffer.read(), master_key,
-                                           self.headers.ENCRYPTIONIV,
-                                           self.headers.CIPHERID)
-            payload_buffer = BytesIO(payload_data)
-            start_bytes_length = len(self.headers.STREAMSTARTBYTES)
-            if payload_buffer.read(start_bytes_length) != self.headers.STREAMSTARTBYTES:
-                raise KDBXInvalidMasterKey('invalid master key')
+        payload_data = payload.decrypt(self.input_buffer.read(), master_key,
+                                       self.headers.ENCRYPTIONIV,
+                                       self.headers.CIPHERID)
+        payload_buffer = BytesIO(payload_data)
+        start_bytes_length = len(self.headers.STREAMSTARTBYTES)
+        if payload_buffer.read(start_bytes_length) != self.headers.STREAMSTARTBYTES:
+            raise KDBXInvalidMasterKey('invalid master key')
 
-            file_data = BytesIO()
-            block_size = -1
-            while block_size != 0:
-                block_id = Int32ul.parse(payload_buffer.read(4))
-                block_hash = Bytes(32).parse(payload_buffer.read(32))
-                block_size = Int32ul.parse(payload_buffer.read(4))
-                if block_size != 0:
-                    block_data = payload_buffer.read(block_size)
-                    if sha256(block_data) != block_hash:
-                        raise KDBXBlockIntegrityError
-                    if self.headers.COMPRESSIONFLAGS == 1:
-                        block_data = gzip.decompress(block_data)
-                    file_data.write(block_data)
-            return file_data.getvalue()
-
-
-
-
-
+        file_data = BytesIO()
+        block_size = -1
+        while block_size != 0:
+            block_id = Int32ul.parse(payload_buffer.read(4))
+            block_hash = Bytes(32).parse(payload_buffer.read(32))
+            block_size = Int32ul.parse(payload_buffer.read(4))
+            if block_size != 0:
+                block_data = payload_buffer.read(block_size)
+                if sha256(block_data) != block_hash:
+                    raise KDBXBlockIntegrityError
+                if self.headers.COMPRESSIONFLAGS == 1:
+                    block_data = gzip.decompress(block_data)
+                file_data.write(block_data)
+        return file_data.getvalue()
