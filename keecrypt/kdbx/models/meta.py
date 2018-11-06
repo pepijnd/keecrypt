@@ -18,9 +18,11 @@ class GroupMeta:
     def __init__(self, parent, root, **kwargs):
         self.parent = parent
         self.root = root
+        self.data = kwargs
 
 
 class EntryMeta:
     def __init__(self, parent, root, **kwargs):
         self.parent = parent
         self.root = root
+        self.data = kwargs

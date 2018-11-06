@@ -4,6 +4,7 @@ from xml.etree import ElementTree
 from construct import Int8ul, Int32ul
 
 from keecrypt.kdbx.parser import KDBXParser
+from keecrypt.kdbx.models import KeepassFile
 
 
 class KDBXReader:
@@ -40,16 +41,7 @@ class KDBXReader:
             self.file_data = buffer.read()
         root = ElementTree.fromstring(self.file_data)
 
-        from kdbx.models import KeepassFile
-
-        test = KeepassFile.from_xml_element(root)
-
-        def itergroups(group, groupId):
-            for subgroup in group.groups:
-                itergroups(subgroup, groupId+1)
-                for entry in subgroup.entries:
-                    print(groupId, subgroup.name, entry['Title'])
-        itergroups(test, 0)
+        return KeepassFile.from_xml_element(root)
 
 
     @staticmethod

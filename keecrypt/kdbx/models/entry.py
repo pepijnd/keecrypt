@@ -1,6 +1,6 @@
 from xml.etree import ElementTree
 
-from keecrypt.kdbx.models import KeePassModelBase, StringValue
+from keecrypt.kdbx.models import KeePassModelBase, StringValue, Message, MessageType
 
 
 class Entry(KeePassModelBase):
@@ -16,10 +16,18 @@ class Entry(KeePassModelBase):
         else:
             raise KeyError(item)
 
+    def __setitem__(self, key, value):
+        for string in self._strings:
+            if string.key == key:
+                string.set_value(value)
+                break
+        else:
+            raise KeyError(key)
+
     @classmethod
     def from_xml_element(cls, element: ElementTree.Element, parent, root):
         uuid = element.findtext('UUID')
         elem = cls(uuid, [], parent, root)
-        strings = [StringValue.from_xml_element(string, parent, root) for string in element.findall('String')]
+        strings = [StringValue.from_xml_element(string, elem, root) for string in element.findall('String')]
         elem._strings = strings
         return elem
