@@ -4,4 +4,6 @@ from .entry import Entry
 from .groups import Group
 from .structure import KeepassFile, Meta, Root
 
-__all__ = ['KeePassModelBase', 'StringValue', 'Meta', 'Root', 'Group', 'GroupMeta', 'EntryMeta', 'Times', 'Entry']
+__all__ = ['KeePassModelBase', 'KeepassFile',
+           'StringValue', 'Meta', 'Root', 'Group', 'GroupMeta', 'EntryMeta', 'Times',
+           'Entry']

@@ -1,25 +1,27 @@
 from PyQt5.QtWidgets import QFileDialog
 
-from keecrypt.gui.controllers import App, MainWindow
+from keecrypt.gui.controllers import App, MainController
 from keecrypt.kdbx import KDBXReader
 
 
-class MainController:
+class KeecryptController:
     def __init__(self):
         self.app = App()
-        self.main_window = MainWindow(self)
-        self.app.set_ui(self.main_window)
+        self.root = self.app.root
+        self.main_controller = MainController(self, self.root)
+        self.app.setup(self.main_controller)
         self.app.run()
 
     def load_file(self):
         dialog = QFileDialog()
         options = dialog.options()
         options |= dialog.DontUseNativeDialog
-        filename = dialog.getOpenFileName(self.main_window.centralWidget,
+        filename = dialog.getOpenFileName(self.root,
                                           '',
                                           'Open Keepass Database',
                                           'Keepass Database (*.kdbx)',
                                           'Keepass Database (*.kdbx)',
                                           options=options)
-        reader = KDBXReader(filename=filename[0])
-        reader.decrypt('test_file')
+        if filename[0]:
+            reader = KDBXReader(filename=filename[0])
+            reader.decrypt('test_file')

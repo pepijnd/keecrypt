@@ -1,4 +1,4 @@
 from .app import App
-from .mainwindow import MainWindow
+from .maincontroller import MainController
 
-__all__ = ['App', 'MainWindow']
+__all__ = ['App', 'MainController']

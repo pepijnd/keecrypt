@@ -6,13 +6,13 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 class App(QApplication):
     def __init__(self):
         super().__init__(sys.argv)
-        self._window = QMainWindow()
-        self._ui = None
+        self.main_controller = None
+        self.root = QMainWindow()
 
-    def set_ui(self, mainwindow):
-        self._ui = mainwindow
-        self._ui.setupUi(self._window)
-        self._window.show()
+    def setup(self, controller):
+        self.main_controller = controller
+        self.main_controller.setup()
 
     def run(self):
+        self.root.show()
         return self.exec_()

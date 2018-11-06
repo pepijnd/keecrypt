@@ -1,3 +1,3 @@
-from .maincontroller import MainController
+from .keecryptcontroller import KeecryptController
 
-__all__ = ['MainController']
+__all__ = ['KeecryptController']

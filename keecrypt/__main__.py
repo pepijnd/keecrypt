@@ -1,8 +1,8 @@
-from keecrypt.controllers import MainController
+from keecrypt.controllers import KeecryptController
 
 
 def main():
-    MainController()
+    KeecryptController()
 
 
 if __name__ == '__main__':

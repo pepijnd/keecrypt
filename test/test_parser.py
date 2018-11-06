@@ -1,5 +1,5 @@
 from keecrypt.kdbx.parser import KDBXParser
-from tests.utils import get_file
+from test.utils import get_file
 
 
 class TestParser:

@@ -4,8 +4,8 @@ from keecrypt.kdbx.models import KeePassModelBase
 
 
 class Times(KeePassModelBase):
-    def __init__(self, **kwargs):
-        super().__init__()
+    def __init__(self, parent, root, **kwargs):
+        super().__init__(parent, root)
         self.creation_time = kwargs.get('creation_time', None)
         self.last_modification_time = kwargs.get('last_modification_time', None)
         self.last_access_time = kwargs.get('last_access_time', None)
@@ -15,10 +15,12 @@ class Times(KeePassModelBase):
 
 
 class GroupMeta:
-    def __init__(self, **kwargs):
-        pass
+    def __init__(self, parent, root, **kwargs):
+        self.parent = parent
+        self.root = root
 
 
 class EntryMeta:
-    def __init__(self, **kwargs):
-        pass
+    def __init__(self, parent, root, **kwargs):
+        self.parent = parent
+        self.root = root

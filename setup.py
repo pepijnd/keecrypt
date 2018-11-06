@@ -2,10 +2,10 @@ import os
 
 from distutils.command.build import build
 from distutils.command.clean import clean
+from distutils.command.install import install
 from distutils.core import Command
 from setuptools import setup, find_packages
 from setuptools.command.test import test
-
 
 from setup import ui
 import keecrypt
@@ -16,6 +16,11 @@ packages = find_packages(exclude=[('setup',), ('tests',)])
 
 class PyTestCommand(test):
     user_options = []
+
+    def __init__(self, dist, **kw):
+        super().__init__(dist, **kw)
+        self.test_args = None
+        self.test_suite = None
 
     def initialize_options(self):
         super().initialize_options()
@@ -67,6 +72,12 @@ class CleanUiCommand(Command):
         ui.clean(os.path.join(root, '.'))
 
 
+class Install(install):
+    def run(self):
+        self.run_command('build_qt')
+        super().run()
+
+
 class Build(build):
     def run(self):
         self.run_command('build_qt')
@@ -99,7 +110,9 @@ setup(
     package_data={'': ['LICENSE' 'README.rst']},
     package_dir={'keecrypt': 'keecrypt'},
     install_requires=requirements,
+    setup_requires=['PyQt5>=5.9'],
     cmdclass={
+        'install': Install,
         'build': Build,
         'build_qt': BuildUiCommand,
         'clean': Clean,

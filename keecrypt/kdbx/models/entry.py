@@ -4,8 +4,8 @@ from keecrypt.kdbx.models import KeePassModelBase, StringValue
 
 
 class Entry(KeePassModelBase):
-    def __init__(self, uuid, strings):
-        super().__init__()
+    def __init__(self, uuid, strings, parent, root):
+        super().__init__(parent, root)
         self.uuid = uuid
         self._strings = strings
 
@@ -17,8 +17,9 @@ class Entry(KeePassModelBase):
             raise KeyError(item)
 
     @classmethod
-    def from_xml_element(cls, element: ElementTree.Element):
+    def from_xml_element(cls, element: ElementTree.Element, parent, root):
         uuid = element.findtext('UUID')
-        strings = [StringValue.from_xml_element(string) for string in element.findall('String')]
-
-        return cls(uuid, strings)
+        elem = cls(uuid, [], parent, root)
+        strings = [StringValue.from_xml_element(string, parent, root) for string in element.findall('String')]
+        elem._strings = strings
+        return elem
