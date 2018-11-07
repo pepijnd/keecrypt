@@ -5,6 +5,6 @@ from .entry import Entry
 from .groups import Group
 from .structure import KeepassFile, Meta, Root
 
-__all__ = ['KeePassModelBase', 'KeepassFile', 'Message', 'MessageType',
+__all__ = ['KeePassModelBase', 'KeepassFile', 'Message', 'MessageType', 'Observer'
            'StringValue', 'Meta', 'Root', 'Group', 'GroupMeta', 'EntryMeta', 'Times',
            'Entry']

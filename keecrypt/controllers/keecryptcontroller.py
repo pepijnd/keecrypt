@@ -24,4 +24,6 @@ class KeecryptController:
                                           options=options)
         if filename[0]:
             reader = KDBXReader(filename=filename[0])
-            reader.decrypt('test_file')
+            file = reader.decrypt('test_file')
+            entries = file.groups[0].entries
+            self.main_controller.entries_model.set_entries(entries)

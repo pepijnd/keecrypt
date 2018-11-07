@@ -1,4 +1,3 @@
-from .testmodel import TestModel
-from .keepassfilemodel import KeepassFileModel
+from .keepassentriesmodel import KeePassEntriesModel
 
-__all__ = ['TestModel', 'KeepassFileModel']
+__all__ = ['KeePassEntriesModel']
