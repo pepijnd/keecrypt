@@ -1,5 +1,3 @@
-
-
 class KDBXException(Exception):
     pass
 
@@ -14,4 +12,3 @@ class KDBXBlockIntegrityError(KDBXException):
 
 class KDBXUnsupportedError(KDBXException):
     pass
-

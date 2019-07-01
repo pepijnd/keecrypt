@@ -47,5 +47,4 @@ class VariantDictionary:
     def __getitem__(self, item):
         if item in self.items:
             return self.items[item]
-        else:
-            raise KeyError()
+        raise KeyError()

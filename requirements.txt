@@ -1,4 +1,9 @@
-PyQt5>=5.9
-construct>=2.8.12
-pycryptodome>=3.4.6
-argon2-cffi>=16.3.0
+-i https://pypi.org/simple
+argon2-cffi==19.1.0
+cffi==1.12.3
+construct==2.9.45
+pycparser==2.19
+pycryptodome==3.8.2
+pyqt5-sip==4.19.17
+pyqt5==5.12.2
+six==1.12.0

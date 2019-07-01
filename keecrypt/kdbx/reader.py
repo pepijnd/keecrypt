@@ -1,23 +1,26 @@
 from io import BytesIO
 from xml.etree import ElementTree
 
-from construct import Int8ul, Int32ul
+from construct import Int32ul
 
 from keecrypt.kdbx.parser import KDBXParser
 from keecrypt.kdbx.models import KeepassFile
 
 
 class KDBXReader:
-    def __init__(self, filename=None, fileobj=None):
-        if filename:
-            with open(filename, 'rb') as f:
+    def __init__(self, file):
+        if isinstance(file, str):
+            with open(file, 'rb') as f:
                 self.input_buffer = BytesIO(f.read())
-        elif fileobj:
-            self.input_buffer = BytesIO(fileobj.read())
+        else:
+            self.input_buffer = BytesIO(file.read())
 
         self.parser = KDBXParser(self.input_buffer)
         self.file_data = None
         self.file_version = (0, 0)
+
+        self.inner_random_stream_id = b''
+        self.inner_random_stream_key = b''
 
     def decrypt(self, password):
         self.file_data = self.parser.decrypt(password)
@@ -55,4 +58,3 @@ class KDBXReader:
         print('Group: ', group.find('Name').text)
         for entry in group.findall('Entry'):
             print('Entry: ', entry.find('String[Key=\'Title\']/Value').text)
-

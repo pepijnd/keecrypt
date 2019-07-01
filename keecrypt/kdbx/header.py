@@ -39,10 +39,11 @@ class KDBXHeaders:
 
     @classmethod
     def type_from_id(cls, type_id):
-        for name, item in cls.__dict__.items():
+        for _name, item in cls.__dict__.items():
             if isinstance(item, KDBXHeaderType):
                 if item.type_id == type_id:
                     return item
+        return None
 
     def set_header(self, type_id, data):
         header_type = self.type_from_id(type_id)

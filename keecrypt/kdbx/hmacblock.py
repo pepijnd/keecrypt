@@ -21,7 +21,7 @@ class HmacBlockStream:
                 block_data = self.buffer.read(block_size)
             else:
                 break
-            blocks.append(HmacBlock(block_hmac, block_id,  block_size, block_data))
+            blocks.append(HmacBlock(block_hmac, block_id, block_size, block_data))
         return blocks
 
     def check_hmac(self, hmac_key):
@@ -44,5 +44,3 @@ class HmacBlock:
                                         self.block_data)
         if block_hmac_digest != self.block_hmac:
             raise KDBXException('Block {} is invalid'.format(self.block_id))
-
-

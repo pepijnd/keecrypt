@@ -3,16 +3,16 @@ import hmac
 from io import BytesIO
 
 
-def sha256(s):
-    return hashlib.sha256(s).digest()
+def sha256(string):
+    return hashlib.sha256(string).digest()
 
 
-def sha512(s):
-    return hashlib.sha512(s).digest()
+def sha512(string):
+    return hashlib.sha512(string).digest()
 
 
-def hmac_sha256(k, v):
-    return hmac.new(k, v, hashlib.sha256).digest()
+def hmac_sha256(key, value):
+    return hmac.new(key, value, hashlib.sha256).digest()
 
 
 class BufferedBytesIO(BytesIO):

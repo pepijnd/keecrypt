@@ -6,13 +6,13 @@ try:
 except ImportError:
     uic = None
     RCCResourceLibrary = None
-    no_pyqt5 = True
+    NO_PYQT5 = True
 else:
-    no_pyqt5 = False
+    NO_PYQT5 = False
 
 
 def build_rcc(src_dir, output_path):
-    for base, sub_dirs, files in os.walk(src_dir):
+    for base, _sub_dirs, files in os.walk(src_dir):
         for file in files:
             if os.path.splitext(file)[1] == '.qrc':
                 library = RCCResourceLibrary()
@@ -26,12 +26,13 @@ def build_rcc(src_dir, output_path):
 
 
 def build_ui(src_dir, output_path):
-    for base, sub_dirs, files in os.walk(src_dir):
+    for base, _sub_dirs, files in os.walk(src_dir):
         for file in files:
             if os.path.splitext(file)[1] == '.ui':
                 module = os.path.relpath(base, src_dir)
                 ui_name = os.path.join(base, file)
-                py_name = os.path.join(output_path, 'ui', module, '_' + os.path.splitext(file)[0] + '_ui.py')
+                py_name = os.path.join(output_path, 'ui', module,
+                                       os.path.splitext(file)[0] + '_ui.py')
 
                 print('building', ui_name, '->', py_name)
                 with open(ui_name, 'r') as ui_file:
@@ -43,7 +44,7 @@ def build_ui(src_dir, output_path):
 
 def clean(root):
     clean_with = ['_rc.py', '_ui.py']
-    for base, sub_dirs, files in os.walk(root):
+    for base, _sub_dirs, files in os.walk(root):
         for file in files:
             for end in clean_with:
                 if file.endswith(end):

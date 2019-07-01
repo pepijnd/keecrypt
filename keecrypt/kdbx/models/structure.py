@@ -26,6 +26,7 @@ class KeepassFile(KeePassModelBase):
 class Meta(KeePassModelBase):
     def __init__(self, parent, root):
         super().__init__(parent, root)
+        self._ = None
 
 
 class Root(KeePassModelBase):
@@ -36,6 +37,7 @@ class Root(KeePassModelBase):
     @classmethod
     def from_xml_element(cls, element: ElementTree.Element, parent, root):
         root_group = cls([], parent, root)
-        groups = [Group.from_xml_element(group, root_group, root) for group in element.findall('Group')]
+        groups = [Group.from_xml_element(group, root_group, root)
+                  for group in element.findall('Group')]
         root_group.groups = groups
         return root_group

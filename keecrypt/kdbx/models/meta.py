@@ -1,5 +1,3 @@
-from xml.etree import ElementTree
-
 from keecrypt.kdbx.models import KeePassModelBase
 
 

@@ -22,6 +22,7 @@ class KeePassModelBase:
 
     @classmethod
     def from_xml_element(cls, element: ElementTree.Element, parent, root):
+        _element = element
         return cls(parent, root)
 
     def to_xml_element(self):
@@ -51,6 +52,9 @@ class StringValue(KeePassModelBase):
     def from_xml_element(cls, element: ElementTree.Element, parent, root):
         key = element.findtext('Key')
         value = element.findtext('Value')
-        v = element.find('Value')
-        protected = False if 'Protected' not in v.attrib else v.attrib['Protected'] is True
+        elem_value = element.find('Value')
+        if 'Protected' not in elem_value.attrib:
+            protected = False
+        else:
+            protected = elem_value.attrib['Protected'] is True
         return cls(key, value, protected, parent, root)

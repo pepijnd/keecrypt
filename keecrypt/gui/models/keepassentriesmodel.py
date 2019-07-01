@@ -1,4 +1,3 @@
-from PyQt5 import QtCore
 from PyQt5.QtCore import QSortFilterProxyModel
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
@@ -22,4 +21,3 @@ class KeePassEntriesModel(QSortFilterProxyModel):
                 except KeyError:
                     row.append(QStandardItem(''))
             self.model.appendRow(row)
-

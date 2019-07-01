@@ -43,7 +43,7 @@ class CompositeKey:
             raise KDBXException('invalid master seed size')
         cipher = AES.new(transform_seed, AES.MODE_ECB)
         transform_key = self.get_key()
-        for n in range(rounds):
+        for _ in range(rounds):
             transform_key = cipher.encrypt(transform_key)
         transform_key = sha256(transform_key)
         master_key = sha256(self.master_seed + transform_key)
@@ -53,7 +53,8 @@ class CompositeKey:
         return master_key, hmac_key
 
     def transform_argon2(self, salt, intervals, memory, parallelism, version):
-        transform_key = hash_secret_raw(self.get_key(), salt, intervals, memory, parallelism, 32, Type.D, version)
+        transform_key = hash_secret_raw(self.get_key(), salt, intervals, memory,
+                                        parallelism, 32, Type.D, version)
         master_key = sha256(self.master_seed + transform_key)
         hmac_key = sha512(self.master_seed + transform_key + b'\x01')
         return master_key, hmac_key

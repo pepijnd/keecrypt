@@ -13,6 +13,11 @@ class KDBXParser:
     signature_primary = b'\x03\xD9\xA2\x9A'
     signature_secondary = b'\x67\xFB\x4B\xB5'
 
+    kdf_options = {
+        'argon2':  b'\xEF\x63\x6D\xDF\x8C\x29\x44\x4B\x91\xF7\xA9\xA4\x03\xE3\x0A\x0C',
+        'aes-kdf': b'\xC9\xD9\xF3\x9A\x62\x8A\x44\x60\xBF\x74\x0D\x08\xC1\x8A\x4F\xEA'
+    }
+
     def __init__(self, input_data):
         if isinstance(input_data, Bytes):
             self.input_buffer = BufferedBytesIO(input_data)
@@ -21,6 +26,7 @@ class KDBXParser:
 
         self.file_version = (0, 0)
         self.headers = KDBXHeaders()
+        self.header_data = BytesIO()
         self.payload_start = 0
 
         self.kdf_parameters = None
@@ -35,16 +41,18 @@ class KDBXParser:
 
     def get_transformed_keys(self, composite_key):
         kdf_uuid = self.kdf_parameters['$UUID']
-        if kdf_uuid == b'\xEF\x63\x6D\xDF\x8C\x29\x44\x4B\x91\xF7\xA9\xA4\x03\xE3\x0A\x0C':
+        if kdf_uuid == __class__.kdf_options['argon2']:
             intervals = self.kdf_parameters['I']
             memory = self.kdf_parameters['M'] // 1024
             parallelism = self.kdf_parameters['P']
             salt = self.kdf_parameters['S']
             version = self.kdf_parameters['V']
-            master_key, hmac_key = composite_key.transform_argon2(salt, intervals, memory, parallelism, version)
-        else:
-            raise KDBXException('invalid key derivative function')
-        return master_key, hmac_key
+            return composite_key.transform_argon2(salt, intervals, memory, parallelism, version)
+        if kdf_uuid == __class__.kdf_options['aes-kdf']:
+            transform_seed = self.kdf_parameters['S']
+            transform_rounds = self.kdf_parameters['R']
+            return composite_key.transform_aeskdf(transform_seed, transform_rounds)
+        raise KDBXException('invalid key derivative function')
 
     def check_header_hash(self, hmac_key):
         header_hash = sha256(self.header_data)
@@ -75,7 +83,7 @@ class KDBXParser:
         composite_key = key.CompositeKey(self.headers.MASTERSEED)
         composite_key.add_key(password_key)
 
-        if not self.file_version[0] >= 4:
+        if self.file_version[0] < 4:
             return self.decrypt_kdbx3(composite_key)
 
         master_key, hmac_key = self.get_transformed_keys(composite_key)
@@ -136,7 +144,7 @@ class KDBXParser:
         file_data = BytesIO()
         block_size = -1
         while block_size != 0:
-            block_id = Int32ul.parse(payload_buffer.read(4))
+            _block_id = Int32ul.parse(payload_buffer.read(4))
             block_hash = Bytes(32).parse(payload_buffer.read(32))
             block_size = Int32ul.parse(payload_buffer.read(4))
             if block_size != 0:

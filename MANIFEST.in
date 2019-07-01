@@ -3,3 +3,4 @@ recursive-include gui_src/ *
 recursive-include setup/ *.py
 recursive-include test/ *.py
 recursive-exclude keecrypt/gui/ui *_ui.py
+recursive-exclude keecrypt/gui/resources *_rc.py

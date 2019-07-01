@@ -8,8 +8,8 @@ class MessageType(Enum):
 
 
 class Message:
-    def __init__(self, type, **kwargs):
-        self.type = type
+    def __init__(self, msg_type, **kwargs):
+        self.type = msg_type
         self.data = kwargs
 
 

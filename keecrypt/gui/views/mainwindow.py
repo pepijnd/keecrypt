@@ -8,5 +8,5 @@ class MainWindow(ui.Mainwindow):
         self.controller = controller
         self.root = self.controller.root
 
-    def setupUi(self, *args,  **kwargs):
         super().setupUi(self.root)
+

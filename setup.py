@@ -52,7 +52,7 @@ class BuildUiCommand(Command):
             assert os.path.exists(self.output_path)
 
     def run(self):
-        if ui.no_pyqt5:
+        if ui.NO_PYQT5:
             raise ImportError("Can't build ui without pyqt5. run pip install pyqt5 to install")
         ui.build_rcc(self.gui_src, self.output_path)
         ui.build_ui(self.gui_src, self.output_path)
@@ -91,26 +91,26 @@ class Clean(clean):
 
 
 requirements = [
-    'construct>=2.8.12',
-    'pycryptodome>=3.4.6',
-    'PyQt5>=5.9',
-    'argon2-cffi>=16.3.0'
+    'construct',
+    'pycryptodome',
+    'PyQt5',
+    'argon2-cffi'
 ]
 
 setup(
     name=keecrypt.__title__,
     version=keecrypt.__version__,
     description=keecrypt.__description__,
-    long_description=open('README.rst', 'r').read(),
+    long_description=open('README.md', 'r').read(),
     author=keecrypt.__author__,
     author_email=keecrypt.__author_email__,
     url=keecrypt.__url__,
     license=keecrypt.__license__,
     packages=packages,
-    package_data={'': ['LICENSE' 'README.rst']},
+    package_data={'': ['LICENSE' 'README.md']},
     package_dir={'keecrypt': 'keecrypt'},
     install_requires=requirements,
-    setup_requires=['PyQt5>=5.9'],
+    setup_requires=['PyQt5'],
     cmdclass={
         'install': Install,
         'build': Build,

@@ -1,3 +1,4 @@
-from ._mainwindow_ui import Ui_MainWindow as Mainwindow
+from .mainwindow_ui import Ui_MainWindow as Mainwindow
+from . import dialogs
 
-__all__ = ['Mainwindow']
+__all__ = ['Mainwindow', 'dialogs']
