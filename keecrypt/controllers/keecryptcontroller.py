@@ -8,4 +8,3 @@ class KeecryptController:
         self.main_controller = MainController(self, self.root)
         self.app.setup(self.main_controller)
         self.app.run()
-

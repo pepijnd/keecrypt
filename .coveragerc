@@ -8,3 +8,8 @@ source =
 omit =
     keecrypt/gui/ui/*
     keecrypt/gui/resources/*
+
+[report]
+exclude_lines = 
+    if __name__ == '__main__':
+

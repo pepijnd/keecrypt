@@ -9,4 +9,3 @@ class MainWindow(ui.Mainwindow):
         self.root = self.controller.root
 
         super().setupUi(self.root)
-
