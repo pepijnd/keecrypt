@@ -3,7 +3,7 @@ argon2-cffi==19.1.0
 cffi==1.12.3
 construct==2.9.45
 pycparser==2.19
-pycryptodome==3.8.2
+pycryptodome==3.19.1
 pyqt5-sip==4.19.17
 pyqt5==5.12.2
 six==1.12.0
